@@ -170,12 +170,12 @@ local function digestblock(b: string, round: number, out: narray): ()
 	for j = 1, 16 do
     w[j] = s232num(b, round + (j - 1) * 4)
   end
-	for j = 17, 64 do
-		local v = w[j - 15]
-		local s0 = bxor(rrotate(v, 7), rrotate(v, 18), rshift(v, 3))
-		local z = w[j - 2]
-		w[j] = w[j - 16] + s0 + w[j - 7] + bxor(rrotate(z, 17), rrotate(z, 19), rshift(z, 10))
-	end
+  for j = 17, 64 do
+  	local v = w[j - 15]
+  	local s0 = bxor(rrotate(v, 7), rrotate(v, 18), rshift(v, 3))
+  	local z = w[j - 2]
+  	w[j] = w[j - 16] + s0 + w[j - 7] + bxor(rrotate(z, 17), rrotate(z, 19), rshift(z, 10))
+  end
 	local a, b, c, d, e, f, g, h = out[1], out[2], out[3], out[4], out[5], out[6], out[7], out[8]
 	for i = 1, 64 do
     local bx = bxor(band(a, b), band(a, c), band(b, c))
@@ -204,13 +204,13 @@ local function sha256(input: string): (string, number)
     return cached, clockc() - timestamp
   end
   local out, pre = clonec(H), preproc(input)
-	for round = 1, #pre, 64 do
+  for round = 1, #pre, 64 do
     digestblock(pre, round, out)
   end
-	local hash = str2hex(concatc({
+  local hash = str2hex(concatc({
     num2s(out[1], 4), num2s(out[2], 4),
     num2s(out[3], 4), num2s(out[4], 4),
-		num2s(out[5], 4), num2s(out[6], 4),
+    num2s(out[5], 4), num2s(out[6], 4),
     num2s(out[7], 4), num2s(out[8], 4),
   }, ''))
   cache[input] = hash
